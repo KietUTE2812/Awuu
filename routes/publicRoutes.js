@@ -148,10 +148,11 @@ router.post("/submit", async (req, res) => {
 
     const fakeName = `Student_${Math.floor(1000 + Math.random() * 9000)}`;
 
-    const phoneNumber = await getPhone({ userAccessToken, token });
-    if (phoneNumber) {
-      sender_info.sdt = phoneNumber;
-    }
+    // const phoneNumber = await getPhone({ userAccessToken, token });
+    // if (phoneNumber) {
+    //   sender_info.sdt = phoneNumber;
+    // }
+    
     const newReport = new Report({
       encrypted_id: encryptedId,
       display_name: fakeName,
