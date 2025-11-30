@@ -1,4 +1,6 @@
 const request = require("request");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const endpoint = "https://graph.zalo.me/v2.0/me/info";
 const secretKey = process.env.ZALO_SECRET;
