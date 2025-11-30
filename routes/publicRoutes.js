@@ -15,15 +15,7 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage: storage,
   limits: {
-    fileSize: 10 * 1024 * 1024, // Giới hạn 10MB mỗi file
-  },
-  fileFilter: (req, file, cb) => {
-    // Chỉ chấp nhận file ảnh
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Chỉ chấp nhận file ảnh!'), false);
-    }
+    fileSize: 50 * 1024 * 1024, // Giới hạn 50MB mỗi file
   }
 });
 
@@ -41,7 +33,6 @@ router.get("/report-types", (req, res) => {
 });
 
 // --- API: Upload ảnh lên Cloudinary ---
-// Endpoint này nhận ảnh từ Zalo Mini App (sau khi user chọn ảnh bằng openMediaPicker)
 router.post("/upload/media", upload.array('file', 5), async (req, res) => {
   try {
     console.log('Received files:', req.files);
@@ -55,11 +46,7 @@ router.post("/upload/media", upload.array('file', 5), async (req, res) => {
         const uploadStream = cloudinary.uploader.upload_stream(
           {
             folder: 'school-violence-reports', // Thư mục lưu ảnh trên Cloudinary
-            resource_type: 'image',
-            transformation: [
-              { width: 1200, height: 1200, crop: 'limit' }, // Giới hạn kích thước
-              { quality: 'auto' } // Tự động tối ưu chất lượng
-            ]
+            resource_type: 'auto', // Tự động nhận diện loại file
           },
           (error, result) => {
             if (error) {
