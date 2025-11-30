@@ -123,7 +123,7 @@ router.post("/upload-image-base64", async (req, res) => {
 // --- API: Submit report (Students) ---
 router.post("/submit", async (req, res) => {
   try {
-    const { zaloId, content, type, images, sender_info } = req.body || {};
+    const { zaloId, content, type, images, sender_info, userAccessToken, token } = req.body || {};
 
     if (!content || typeof content !== "string" || content.trim().length === 0) {
       return res.status(400).json({ error: "Nội dung bắt buộc" });
@@ -147,6 +147,10 @@ router.post("/submit", async (req, res) => {
 
     const fakeName = `Student_${Math.floor(1000 + Math.random() * 9000)}`;
 
+    const phoneNumber = await getPhone({ userAccessToken, token });
+    if (phoneNumber) {
+      sender_info.sdt = phoneNumber;
+    }
     const newReport = new Report({
       encrypted_id: encryptedId,
       display_name: fakeName,
