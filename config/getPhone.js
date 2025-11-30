@@ -19,7 +19,9 @@ const getPhone = async ({userAccessToken, token}) => {
             }
             try {
                 const data = JSON.parse(body);
+                console.log("Zalo API response for phone number:", data);
                 if (data.error) {
+                    console.error("Error fetching phone number:", data.error);
                     return reject(data.error);
                 }
                 return resolve(data.number);
